@@ -36,20 +36,20 @@ public class ImageCompression {
 		
 		String sourceFilename=directory+"image_b.pgm.SVD";
 		
-		//µÃµ½pgmµÄ¶ş½øÖÆÎÄ¼ş£¬²¢ÇÒÉú³ÉSVD.txtÎÄ¼ş
+		//å¾—åˆ°pgmçš„äºŒè¿›åˆ¶æ–‡ä»¶ï¼Œå¹¶ä¸”ç”ŸæˆSVD.txtæ–‡ä»¶
 		step1(pgmFile,SVDFile);
 		
-		//½«pgmµÄ¶ş½øÖÆÎÄ¼ş×ª»¯ÎªASCIIÎÄ¼ş
+		//å°†pgmçš„äºŒè¿›åˆ¶æ–‡ä»¶è½¬åŒ–ä¸ºASCIIæ–‡ä»¶
 		step2(pgm_b_File);
 		
-		//¸ù¾İheader.txt,SVD.txt,rankÖµ£¬¶ÔÍ¼Ïñ½øĞĞÑ¹Ëõ´æ´¢
+		//æ ¹æ®header.txt,SVD.txt,rankå€¼ï¼Œå¯¹å›¾åƒè¿›è¡Œå‹ç¼©å­˜å‚¨
 		step3(headerFile, SVDFile, rank, sourceFilename);
 		
-		//½«Ñ¹ËõÖ®ºóµÄ.pgm.SVDÎÄ¼ş½øĞĞ½âÂë£¬¿ÉÒÔ²é¿´»Ö¸´³öÀ´Í¼ÏñĞ§¹û
+		//å°†å‹ç¼©ä¹‹åçš„.pgm.SVDæ–‡ä»¶è¿›è¡Œè§£ç ï¼Œå¯ä»¥æŸ¥çœ‹æ¢å¤å‡ºæ¥å›¾åƒæ•ˆæœ
 		step4(sourceFilename);
 	}
 	
-	//Éú³ÉpgmµÄ¶ş½øÖÆÎÄ¼şºÍ´æ´¢¾ØÕóµÄSVD.txtÎÄ¼ş
+	//ç”Ÿæˆpgmçš„äºŒè¿›åˆ¶æ–‡ä»¶å’Œå­˜å‚¨çŸ©é˜µçš„SVD.txtæ–‡ä»¶
 	public static void step1(String fileName,String SVDFile) throws IOException {
 		
 		pixelV = new ArrayList<ArrayList<Integer>>();
@@ -63,7 +63,7 @@ public class ImageCompression {
 		System.out.println(height);
 		max_pixel_value = Integer.parseInt(sc.next());
 		System.out.println(max_pixel_value);
-		//½«¾ØÕó¶ÁÈ¡µ½pixelLVÖĞ
+		//å°†çŸ©é˜µè¯»å–åˆ°pixelLVä¸­
 		for (int i1 = 0; i1 < height; i1++) {
 			ArrayList<Integer> t = new ArrayList<Integer>();
 			for (int j1 = 0; j1 < width; j1++) {
@@ -73,36 +73,36 @@ public class ImageCompression {
 		}
 		DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(
 				new FileOutputStream(fileName.substring(0, fileName.indexOf(".")) + "_b" + ".pgm")));
-		//½«widthºÍheightÓÉint-->String
+		//å°†widthå’Œheightç”±int-->String
 		String width_binary = binary_2_convert(width);
 		String height_binary = binary_2_convert(height);
-		//b1,b2,h1,h2·Ö±ğ´æwidthºÍheightµÄÇ°8bitºÍºó8bit
+		//b1,b2,h1,h2åˆ†åˆ«å­˜widthå’Œheightçš„å‰8bitå’Œå8bit
 		int b1 = integer_value(width_binary.substring(0, 8));
 		int b2 = integer_value(width_binary.substring(8, 16));
 		int h1 = integer_value(height_binary.substring(0, 8));
 		int h2 = integer_value(height_binary.substring(8, 16));
-		//ÒÔ¶ş½øÖÆĞÎÊ½Ğ´Èëb1,b2,h1,h2,max_pixel_value
+		//ä»¥äºŒè¿›åˆ¶å½¢å¼å†™å…¥b1,b2,h1,h2,max_pixel_value
 		dos.writeByte(b1);
 		dos.writeByte(b2);
 		dos.writeByte(h1);
 		dos.writeByte(h2);
 		dos.writeByte(max_pixel_value);
 		
-		//ÒÔ¶ş½øÖÆĞÎÊ½Ğ´ÈëÏñËØpixelV
+		//ä»¥äºŒè¿›åˆ¶å½¢å¼å†™å…¥åƒç´ pixelV
 		for (ArrayList<Integer> a1 : pixelV) {
 			for (int i = 0; i < a1.size(); i++) {
 				dos.writeByte(a1.get(i));
 			}
 		}
 		/// System.out.println("inside a1"+ a[1]);
-		//Éú³ÉSVD¾ØÕóÎÄ¼ş
+		//ç”ŸæˆSVDçŸ©é˜µæ–‡ä»¶
 		createSVD(fileName,SVDFile);
 		dos.flush();
 		dos.close();
 		sc.close();
 	}
 	
-	//¶ÁÈ¡pgmµÄ¶ş½øÖÆÎÄ¼ş£¬È»ºó×ª»¯ÎªintĞÍ²¢´æÈëÎÄ¼şÖĞ
+	//è¯»å–pgmçš„äºŒè¿›åˆ¶æ–‡ä»¶ï¼Œç„¶åè½¬åŒ–ä¸ºintå‹å¹¶å­˜å…¥æ–‡ä»¶ä¸­
 	public static void step2(String fileName) throws IOException {
 		
 		DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream(fileName)));
@@ -114,7 +114,7 @@ public class ImageCompression {
 			byte hw[] = new byte[5];
 			dis.read(hw);
 			
-			//½«width,heightÓÉbyte-->int-->String-->int
+			//å°†width,heightç”±byte-->int-->String-->int
 			width = integer_value(binary_1_convert(byte2Int(hw[0])) + binary_1_convert(byte2Int(hw[1])));
 			height = integer_value(binary_1_convert(byte2Int(hw[2])) + binary_1_convert(byte2Int(hw[3])));
 
@@ -124,10 +124,10 @@ public class ImageCompression {
 			pw.write(height + "\n");
 			pw.write(max_pixel_value + "\n");
 			byte t[] = new byte[width * height];
-			//½«¶ş½øÖÆÎÄ¼ş¶ÁÈëbyteÊı×étÖĞ
+			//å°†äºŒè¿›åˆ¶æ–‡ä»¶è¯»å…¥byteæ•°ç»„tä¸­
 			dis.read(t);
 			int tij = 0;
-			//½«byteÊı×étÖĞµÄÊı¾İ×ª»¯ÎªintĞÍ£¬È»ºó´æÈëÎÄ¼şÖĞ
+			//å°†byteæ•°ç»„tä¸­çš„æ•°æ®è½¬åŒ–ä¸ºintå‹ï¼Œç„¶åå­˜å…¥æ–‡ä»¶ä¸­
 			for (int ti = 0; ti < height; ti++) {
 				for (int tj = 0; tj < width; tj++) {
 					int pix;
@@ -148,7 +148,7 @@ public class ImageCompression {
 		dis.close();
 	}
 	
-	//¸ù¾İheader.txt,SVD.txt,rankÖµ£¬Éú³ÉÑ¹ËõÖ®ºóµÄÎÄ¼ş
+	//æ ¹æ®header.txt,SVD.txt,rankå€¼ï¼Œç”Ÿæˆå‹ç¼©ä¹‹åçš„æ–‡ä»¶
 	public static void step3(String headerFile,String SVDFile,String rank,String sourceFile) {
 		
 		SVD Svd2 = new SVD();
@@ -160,13 +160,13 @@ public class ImageCompression {
 		
 	}
 	
-	//½âÂë.pgm.SVDÑ¹ËõÎÄ¼ş£¬¿ÉÒÔÓëÔ­Í¼½øĞĞ±È½Ï
+	//è§£ç .pgm.SVDå‹ç¼©æ–‡ä»¶ï¼Œå¯ä»¥ä¸åŸå›¾è¿›è¡Œæ¯”è¾ƒ
 	public static void step4(String fileName) {
 		
 		String sourceFilename = fileName;
 		SVD mySvd2 = new SVD();
 		mySvd2.readBinary(sourceFilename);
-		//´ÓÑ¹ËõÎÄ¼ş.pgm.SVDÎÄ¼şÖĞ¶ÁÈ¡µÃµ½u,s,v¾ØÕó
+		//ä»å‹ç¼©æ–‡ä»¶.pgm.SVDæ–‡ä»¶ä¸­è¯»å–å¾—åˆ°u,s,vçŸ©é˜µ
 		Matrix u = mySvd2.getU();
 		Matrix s = mySvd2.getS();
 		Matrix v = mySvd2.getV();
@@ -175,7 +175,7 @@ public class ImageCompression {
 		{
 			restore = restore.transpose();
 		}
-		//»ñÈ¡»Ò¶ÈÖµ
+		//è·å–ç°åº¦å€¼
 		int[][] gray_values = new int[restore.getRowDimension()][restore.getColumnDimension()];
 		int n = 0;
 		for (int i = 0; i < gray_values.length; i++) {
@@ -190,7 +190,7 @@ public class ImageCompression {
 				}
 			}
 		}
-		//Éú³É½âÂëÖ®ºóµÄpgmÍ¼ÏñÎÄ¼ş
+		//ç”Ÿæˆè§£ç ä¹‹åçš„pgmå›¾åƒæ–‡ä»¶
 		Pgm pm1 = new Pgm();
 		pm1.setHeight(gray_values.length);
 		pm1.setWidth(gray_values[0].length);
@@ -207,7 +207,7 @@ public class ImageCompression {
 		pm.readPgm(src);
 		int[][] gray_values = pm.getGrays();
 
-		//Éú³ÉÔ­Ê¼Í¼Ïñ¶ÔÓ¦µÄ¾ØÕóm
+		//ç”ŸæˆåŸå§‹å›¾åƒå¯¹åº”çš„çŸ©é˜µm
 		Matrix m = new Matrix(pm.getHeight(), pm.getWidth());
 		for (int i = 0; i < pm.getHeight(); i++) {
 			for (int j = 0; j < pm.getWidth(); j++) {
@@ -218,23 +218,23 @@ public class ImageCompression {
 			m = m.transpose();
 		}
 
-		//Jama°üµÄsvd()·½·¨Éú³É¾ØÕómµÄSVD¾ØÕó
+		//JamaåŒ…çš„svd()æ–¹æ³•ç”ŸæˆçŸ©é˜µmçš„SVDçŸ©é˜µ
 		SingularValueDecomposition svd = m.svd();
 		SVD Svd2;
 		Svd2 = new SVD();
-		//ÓÃsvd2·Ö±ğ»ñµÃÔ­Ê¼Í¼ÏñµÄsvd¾ØÕóµÄu,s,v¾ØÕó
+		//ç”¨svd2åˆ†åˆ«è·å¾—åŸå§‹å›¾åƒçš„svdçŸ©é˜µçš„u,s,vçŸ©é˜µ
 		Svd2.setU(svd.getU());
 		Svd2.setS(svd.getS());
 		Svd2.setV(svd.getV());
-		//½«svd2Ğ´ÈëSVD.txt£¬»ñµÃ°üº¬u,s,vÈı¸ö¾ØÕóµÄSVD.txtÎÄ¼ş
+		//å°†svd2å†™å…¥SVD.txtï¼Œè·å¾—åŒ…å«u,s,vä¸‰ä¸ªçŸ©é˜µçš„SVD.txtæ–‡ä»¶
 		Svd2.writeText(createSVDFile);
 
 	}
 
-	//½«int-->String
+	//å°†int-->String
 	public static String binary_1_convert(int a) {
 		String x = Integer.toBinaryString(a);
-		//Èç¹û×ª»¯ºóµÄ×Ö·û´®³¤¶È²»¹»8£¬¼´¶ÔÓ¦µÄÊıÖµ²»¹»8bit1¸ö×Ö½Ú£¬Ç°²¹0
+		//å¦‚æœè½¬åŒ–åçš„å­—ç¬¦ä¸²é•¿åº¦ä¸å¤Ÿ8ï¼Œå³å¯¹åº”çš„æ•°å€¼ä¸å¤Ÿ8bit1ä¸ªå­—èŠ‚ï¼Œå‰è¡¥0
 		if (x.length() <= 8) {
 			for (int i = x.length(); i < 8; i++) {
 				x = "0" + x;
@@ -243,10 +243,10 @@ public class ImageCompression {
 		return x;
 	}
 
-	//½«int-->String
+	//å°†int-->String
 	public static String binary_2_convert(int a) {
 		String x = Integer.toBinaryString(a);
-		//Èç¹û×ª»¯ºóµÄ×Ö·û´®³¤¶È²»¹»16£¬¼´¶ÔÓ¦µÄÊıÖµ²»¹»16bit2¸ö×Ö½Ú£¬Ç°²¹0
+		//å¦‚æœè½¬åŒ–åçš„å­—ç¬¦ä¸²é•¿åº¦ä¸å¤Ÿ16ï¼Œå³å¯¹åº”çš„æ•°å€¼ä¸å¤Ÿ16bit2ä¸ªå­—èŠ‚ï¼Œå‰è¡¥0
 		if (x.length() <= 16) {
 			for (int i = x.length(); i < 16; i++) {
 				x = "0" + x;
@@ -280,20 +280,20 @@ public class ImageCompression {
 
 }
 
-//ÃèÊöSVD¾ØÕóµÄÀà
+//æè¿°SVDçŸ©é˜µçš„ç±»
 class SVD {
 	
-	//¶ÔÓ¦µÄu,s,vÈı¸ö¾ØÕó
+	//å¯¹åº”çš„u,s,vä¸‰ä¸ªçŸ©é˜µ
 	private Matrix u;
 	private Matrix s;
 	private Matrix v;
-	//rankÖµ
+	//rankå€¼
 	private int rank;
 	
 	private boolean transposed;
 	private final double FACTOR = 32768.0;
 	
-	//½«u,s,vÈı¸ö¾ØÕó´ÓSVD.txtÎÄ¼şÖĞ¶Á³öÀ´
+	//å°†u,s,vä¸‰ä¸ªçŸ©é˜µä»SVD.txtæ–‡ä»¶ä¸­è¯»å‡ºæ¥
 	public void readText(String fn) {
 		try {
 			Scanner scanner = new Scanner(new File(fn));
@@ -324,7 +324,7 @@ class SVD {
 	 * @param fn
 	 *            fn of the SVD file.
 	 */
-	//½«u,s,vÈı¸ö¾ØÕóĞ´ÈëSVD.txtÎÄ¼şÖĞ
+	//å°†u,s,vä¸‰ä¸ªçŸ©é˜µå†™å…¥SVD.txtæ–‡ä»¶ä¸­
 	public void writeText(String fn) {
 		try {
 			PrintWriter op = new PrintWriter(fn);
@@ -349,7 +349,7 @@ class SVD {
 		}
 	}
 
-	//¶ÁÈ¡Ñ¹ËõÎÄ¼ş.pgm.SVDÎÄ¼ş
+	//è¯»å–å‹ç¼©æ–‡ä»¶.pgm.SVDæ–‡ä»¶
 	public void readBinary(String fn) {
 		try {
 			DataInputStream ip = new DataInputStream(new FileInputStream(fn));
@@ -358,11 +358,11 @@ class SVD {
 			} else {
 				transposed = false;
 			}
-			//»ñÈ¡m,n,rankµÄÖµ
+			//è·å–m,n,rankçš„å€¼
 			int urd = ip.readShort(); // row
 			int vrd = ip.readShort(); // column
 			rank = ip.readShort(); // rank
-			//·Ö±ğ»ñÈ¡u,s,v¾ØÕó
+			//åˆ†åˆ«è·å–u,s,vçŸ©é˜µ
 			u = new Matrix(urd, rank);
 			s = new Matrix(rank, rank);
 			v = new Matrix(vrd, rank);
@@ -392,7 +392,7 @@ class SVD {
 		}
 	}
 
-	//¸ù¾İheight,width,SVD¾ØÕó£¬rankÖµ¼ÆËãÉú³ÉÑ¹ËõÖ®ºóµÄ.pgm.SVDÎÄ¼ş
+	//æ ¹æ®height,width,SVDçŸ©é˜µï¼Œrankå€¼è®¡ç®—ç”Ÿæˆå‹ç¼©ä¹‹åçš„.pgm.SVDæ–‡ä»¶
 	public void writeBinary(String fn) {
 		try {
 			DataOutputStream op = new DataOutputStream(new FileOutputStream(fn));
@@ -423,7 +423,7 @@ class SVD {
 		}
 	}
 
-	//¶ÁÈ¡header.txtÎÄ¼ş£¬´Ó¶øÈ·¶¨¾ØÕóm,nÖµ
+	//è¯»å–header.txtæ–‡ä»¶ï¼Œä»è€Œç¡®å®šçŸ©é˜µm,nå€¼
 	public void readHeader(String fn) {
 		try {
 			Scanner scanner = new Scanner(new File(fn));
@@ -462,7 +462,7 @@ class SVD {
 		return Math.sqrt(norm2 / norm1);
 	}
 
-	//get(),set()·½·¨
+	//get(),set()æ–¹æ³•
 	public Matrix getU() {
 		return u;
 	}
@@ -505,17 +505,17 @@ class SVD {
 
 }
 
-//ÃèÊöpgmÎÄ¼şµÄÀà
+//æè¿°pgmæ–‡ä»¶çš„ç±»
 class Pgm {
 
-	//ÊôĞÔ£º¿í£¬¸ß£¬»Ò¶ÈÖµ£¬»Ò¶ÈÖµµÄ×î´óÖµ
+	//å±æ€§ï¼šå®½ï¼Œé«˜ï¼Œç°åº¦å€¼ï¼Œç°åº¦å€¼çš„æœ€å¤§å€¼
 	static int width, height, gray_values[][], maxval;
 
 	public static void main1() {
 
 	}
 
-	//get(),set()·½·¨
+	//get(),set()æ–¹æ³•
 	public int[][] getGrays() {
 		return gray_values;
 	}
@@ -544,7 +544,7 @@ class Pgm {
 		return width;
 	}
 
-	//ÒÔASCII¸ñÊ½Ğ´ÈëÉú³ÉpgmÎÄ¼ş
+	//ä»¥ASCIIæ ¼å¼å†™å…¥ç”Ÿæˆpgmæ–‡ä»¶
 	public void writePgm(String fn) {
 		try {
 			PrintWriter op = new PrintWriter(fn);
@@ -566,7 +566,7 @@ class Pgm {
 		}
 	}
 
-	//¶ÁÈ¡pgmµÄASCII¸ñÊ½ÎÄ¼ş
+	//è¯»å–pgmçš„ASCIIæ ¼å¼æ–‡ä»¶
 	public void readPgm(String fn) {
 		try {
 			Scanner scanner = new Scanner(new File(fn));
